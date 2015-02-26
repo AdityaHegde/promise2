@@ -39,6 +39,9 @@ function Promise(fn, tracker, type) {
 
   function resolve(newValue) {
     try { //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+      if(tracker) {
+        tracker.resolved(self);
+      }
       if (newValue === self) throw new TypeError('A promise cannot be resolved with itself.');
       if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
         var then = newValue.then;
@@ -50,9 +53,6 @@ function Promise(fn, tracker, type) {
       state = true;
       value = newValue;
       finale();
-      if(tracker) {
-        tracker.resolved(this);
-      }
     } catch (e) { reject(e) }
   }
   this.resolve = resolve;

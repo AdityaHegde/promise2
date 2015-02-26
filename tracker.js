@@ -1,4 +1,4 @@
-function ProcessPromiseTracker() {
+function PromiseTracker() {
   this.que = [];
   this.runningBlockingAsync = null;
   this.curNonBlockingAsyncPromisesCount = 0;
@@ -35,7 +35,7 @@ function invokeNextPromise(tracker) {
   }
 }
 
-ProcessPromiseTracker.prototype.add = function(promise) {
+PromiseTracker.prototype.add = function(promise) {
   this.que.push(promise);
   if(promise.type === 0) {
     //blocking async promise
@@ -45,7 +45,7 @@ ProcessPromiseTracker.prototype.add = function(promise) {
   }
   invokeNextPromise(this);
 };
-ProcessPromiseTracker.prototype.resolved = function(promise) {
+PromiseTracker.prototype.resolved = function(promise) {
   if(promise.type === 0) {
     //blocking async promise
     this.runningBlockingAsync = null;
@@ -59,10 +59,10 @@ ProcessPromiseTracker.prototype.resolved = function(promise) {
   }
   invokeNextPromise(this);
 };
-ProcessPromiseTracker.prototype.rejected = function() {
+PromiseTracker.prototype.rejected = function() {
   for(var i = 0; i < this.que.length; i++) {
     this.que[i].reject();
   }
 };
 
-module.exports = ProcessPromiseTracker;
+module.exports = PromiseTracker;

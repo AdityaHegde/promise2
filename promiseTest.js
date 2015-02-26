@@ -1,6 +1,6 @@
 var
 Promise = require("./promise"),
-ProcessPromiseTracker = require("./tracker"),
+PromiseTracker = require("./tracker"),
 
 nodelikeFun = function(a, c) {
   console.log(a + " beg *");
@@ -11,7 +11,7 @@ nodelikeFun = function(a, c) {
 },
 promiseLikFun = Promise.denodeify(nodelikeFun),
 
-tracker = new ProcessPromiseTracker();
+tracker = new PromiseTracker();
 
 new Promise(function(resolve, reject) {
   console.log("1 beg");
