@@ -19,21 +19,21 @@ new Promise(function(resolve, reject) {
     console.log("1 end");
     resolve();
   }, 1000);
-}, tracker, 0);
+}, tracker, 0).then(function() {console.log("1 then");});
 new Promise(function(resolve, reject) {
   console.log("2 beg");
   setTimeout(function() {
     console.log("2 end");
     resolve();
   }, 5000);
-}, tracker, 1);
+}, tracker, 1).then(function() {console.log("2 then");});
 new Promise(function(resolve, reject) {
   console.log("3 beg");
   setTimeout(function() {
     console.log("3 end");
     resolve();
   }, 4000);
-}, tracker, 1);
+}, tracker, 1).then(function() {console.log("3 then");});
 new Promise(function(resolve, reject) {
   console.log("4 beg");
   setTimeout(function() {
@@ -41,7 +41,7 @@ new Promise(function(resolve, reject) {
     resolve();
   }, 3000);
 }, tracker, 1);
-new Promise(function(resolve, reject) {
+/*new Promise(function(resolve, reject) {
   console.log("5 beg");
   setTimeout(function() {
     console.log("5 end");
@@ -58,4 +58,4 @@ new Promise(function(resolve, reject) {
 promiseLikFun(tracker, 0, 7);
 promiseLikFun(tracker, 1, 8);
 promiseLikFun(tracker, 1, 9);
-promiseLikFun(tracker, 0, 10);
+promiseLikFun(tracker, 0, 10);*/

@@ -25,7 +25,7 @@ function invokeNextPromise(tracker) {
   }
   else if(!tracker.runningBlockingAsync) {
     //console.log("async non blocking running");
-    if(tracker.que[0].type === 1) {
+    if(tracker.que.length > 0 && tracker.que[0].type === 1) {
       //console.log("resuming non blocking from front");
       unwindQue(tracker);
     }

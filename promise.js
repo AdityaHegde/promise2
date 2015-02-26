@@ -39,20 +39,27 @@ function Promise(fn, tracker, type) {
 
   function resolve(newValue) {
     try { //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
-      if(tracker) {
-        tracker.resolved(self);
-      }
       if (newValue === self) throw new TypeError('A promise cannot be resolved with itself.');
       if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
         var then = newValue.then;
         if (typeof then === 'function') {
           doResolve(then.bind(newValue), resolve, reject);
+          asap(function() {
+            if(tracker) {
+              tracker.resolved(self);
+            }
+          });
           return;
         }
       }
       state = true;
       value = newValue;
       finale();
+      asap(function() {
+        if(tracker) {
+          tracker.resolved(self);
+        }
+      });
     } catch (e) { reject(e) }
   }
   this.resolve = resolve;
@@ -60,16 +67,19 @@ function Promise(fn, tracker, type) {
   function reject(newValue) {
     state = false;
     value = newValue;
-    if(tracker) {
-      tracker.rejected();
-    }
     finale();
+    asap(function() {
+      if(tracker) {
+        tracker.resolved(self);
+      }
+    });
   }
   this.reject = reject;
 
   function finale() {
-    for (var i = 0, len = deferreds.length; i < len; i++)
+    for (var i = 0, len = deferreds.length; i < len; i++) {
       handle(deferreds[i]);
+    }
     deferreds = null;
   }
 
