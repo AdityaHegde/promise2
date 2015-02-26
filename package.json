@@ -1,5 +1,5 @@
 {
-  "name": "process-promise",
+  "name": "promise2",
   "version": "1.0.0",
   "description": "Process wraper for promises",
   "keywords": [
@@ -14,13 +14,16 @@
   "homepage": "http://www.openshift.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AdityaHegde/process-promise"
+    "url": "https://github.com/AdityaHegde/promise2"
   },
   "engines": {
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
   },
   "devDependencies": {
+    "asap": "*"
+  },
+  "dependencies" : {
     "asap": "*"
   },
   "bundleDependencies": [],
