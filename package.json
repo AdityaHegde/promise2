@@ -20,13 +20,7 @@
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
   },
-  "devDependencies": {
-    "asap": "*"
-  },
   "dependencies" : {
     "asap": "*"
-  },
-  "bundleDependencies": [],
-  "scripts" : {
   }
 }
