@@ -21,6 +21,16 @@
     "npm": ">= 1.0.0"
   },
   "dependencies" : {
-    "asap": "*"
+    "asap": "*",
+    "promise": "*"
+  },
+  "devDependencies" : {
+    "mocha" : "*",
+    "istanbul": "*",
+    "coveralls": "*",
+    "mocha-lcov-reporter": "*"
+  },
+  "scripts": {
+    "test" : "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- --check-leaks -t 60000 tests/*.js && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   }
 }

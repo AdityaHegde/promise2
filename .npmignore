@@ -1,4 +1,5 @@
-*.swp
+tests
 node_modules
 npm-debug.log
 coverage
+.travis.yml

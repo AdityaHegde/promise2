@@ -1,8 +1,9 @@
 var
-Promise = require("./promise"),
-PromiseTracker = require("./tracker");
+//Promise = require("./lib/promise"),
+Promise = require("promise"),
+PromiseTracker = require("./lib/promise-tracker");
 
 module.exports = {
-  Promise        : Promise,,
+  Promise        : Promise,
   PromiseTracker : PromiseTracker,
 };
