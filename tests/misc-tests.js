@@ -4,14 +4,19 @@ Promise = require("../index").Promise,
 PromiseTracker = require("../index").PromiseTracker;
 
 describe("Misc Tests", function() {
-  it("tracker.wait", function() {
+  it("tracker.wait", function(done) {
     var
+    orderCheck = [2, 1, 0, 4, 3],
     tracker = new PromiseTracker(),
     order = [],
     checkOrder = function() {
-      if(order.length === 5) {
-        assert.deepEqual(order, [2, 1, 0, 4, 3]);
-        done();
+      if(order.length === orderCheck.length) {
+        try {
+          assert.deepEqual(order, orderCheck);
+          done();
+        } catch(err) {
+          done(err);
+        }
       }
     };
     for(var i = 0; i < 5; i++) {
@@ -33,14 +38,19 @@ describe("Misc Tests", function() {
     }
   });
 
-  it("tracker.andThen", function() {
+  it("tracker.andThen", function(done) {
     var
+    orderCheck = [2, 1, 0, "andThen", 4, 3],
     tracker = new PromiseTracker(),
     order = [],
     checkOrder = function() {
-      if(order.length === 5) {
-        assert.deepEqual(order, [2, 1, 0, "andThen", 4, 3]);
-        done();
+      if(order.length === orderCheck.length) {
+        try {
+          assert.deepEqual(order, orderCheck);
+          done();
+        } catch(err) {
+          done(err);
+        }
       }
     };
     for(var i = 0; i < 5; i++) {
@@ -64,14 +74,19 @@ describe("Misc Tests", function() {
     }
   });
 
-  it("Error test", function() {
+  it("Error test", function(done) {
     var
+    orderCheck = [4, 3, 2, 1, 0, "Error", "0*", "1*", "2*", "3*", "4*"],
     tracker = new PromiseTracker(),
     order = [],
     checkOrder = function() {
-      if(order.length === 5) {
-        assert.deepEqual(order, [2, 1, 0, 3, 4]);
-        done();
+      if(order.length === orderCheck.length) {
+        try {
+          assert.deepEqual(order, orderCheck);
+          done();
+        } catch(err) {
+          done(err);
+        }
       }
     };
 
@@ -79,7 +94,7 @@ describe("Misc Tests", function() {
       (function() {
         var pi = i;
         tracker.addAsyncNonBlocking(function () {
-          var p = new Promise(function(resolve, reject) {
+          return new Promise(function(resolve, reject) {
             setTimeout(function() {
               order.push(pi);
               checkOrder();
@@ -91,20 +106,30 @@ describe("Misc Tests", function() {
               }
             }, 150 - pi * 15);
           });
-          p.then(function() {
-          }, function() {
-            order.push(pi + "*");
-            checkOrder();
-            resolve();
-          });
-          return p;
         });
       })();
-      if(i === 2) {
-        tracker.andThen(function() {
-          order.push("andThen");
-        });
-      }
     }
+    for(var i = 0; i < 5; i++) {
+      (function() {
+        var pi = i;
+        tracker.addAsyncBlocking(function () {
+          var p = new Promise(function(resolve, reject) {
+            setTimeout(function() {
+              order.push(pi);
+              checkOrder();
+              resolve();
+            }, 50);
+          });
+          return p;
+        }).then(function() {}, function() {
+          order.push(pi + "*");
+          checkOrder();
+        });
+      })();
+    }
+    tracker.onError(function() {
+      order.push("Error");
+      checkOrder();
+    });
   });
 });

@@ -37,8 +37,12 @@ describe("No delay tests", function() {
         order = [],
         checkOrder = function() {
           if(order.length === test.promises.length) {
-            assert.deepEqual(order, test.order);
-            done();
+            try {
+              assert.deepEqual(order, test.order);
+              done();
+            } catch(err) {
+              done(err);
+            }
           }
         };
 
