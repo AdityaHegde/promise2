@@ -41,7 +41,7 @@ tests = [{
 }],
 functions = ["addAsyncBlocking", "addAsyncNonBlocking"];
 
-describe("Sanity Tests", function() {
+describe("Then Tests", function() {
   for(var i = 0; i < tests.length; i++) {
     (function() {
       var
@@ -58,15 +58,19 @@ describe("Sanity Tests", function() {
         };
 
         for(var j = 0; j < test.promises.length; j++) {
-          tracker[functions[test.promises[j]]](function (pi) {
-            return new Promise(function(resolve, reject) {
-              setTimeout(function() {
-                order.push(pi);
-                checkOrder();
-                resolve();
-              }, test.timeFun(pi));
+          (function() {
+            var _j = j;
+            tracker[functions[test.promises[j]]](function (pi) {
+              return new Promise(function(resolve, reject) {
+                setTimeout(function() {
+                  resolve();
+                }, test.timeFun(pi));
+              });
+            }, j, this).then(function() {
+              order.push(_j);
+              checkOrder();
             });
-          }, j, this);
+          })();
         }
       });
     })();
