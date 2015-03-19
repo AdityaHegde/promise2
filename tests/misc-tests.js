@@ -132,4 +132,46 @@ describe("Misc Tests", function() {
       checkOrder();
     });
   });
+
+  it("Method nesting", function(done) {
+    var
+    orderCheck = ["1st", "2nd", "3rd"],
+    tracker = new PromiseTracker(),
+    order = [],
+    checkOrder = function() {
+      if(order.length === orderCheck.length) {
+        try {
+          assert.deepEqual(order, orderCheck);
+          done();
+        } catch(err) {
+          done(err);
+        }
+      }
+    };
+    
+    tracker = new PromiseTracker();
+    tracker.addAsyncBlocking(function() {
+      return new Promise(function(resolve, reject) {
+        setTimeout(function() {
+          order.push("1st");
+          resolve();
+        });
+      });
+    });
+
+    tracker.andThen(function() {
+      order.push("2nd");
+
+      tracker.andThen(function() {
+        order.push("3rd");
+        checkOrder();
+      });
+
+      checkOrder();
+    });
+
+    tracker.onError(function() {
+      order.push("Error");
+    });
+  });
 });
