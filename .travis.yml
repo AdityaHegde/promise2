@@ -5,4 +5,4 @@ node_js:
 deploy:
   provider: npm
   email: adityahegderocks@gmail.com
-  api_key: LW4gQWRpdHlhSGVnZGU6NS5zb21ldGhpbmcK
+  api_key:
